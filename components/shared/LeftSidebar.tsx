@@ -44,7 +44,7 @@ const LeftSidebar = () => {
 
       <div className='px-6 mt-10'>
         <SignedIn>
-          <SignOutButton signOutCallback={() => router.push("/sign-in")}>
+          <SignOutButton signOutCallback={() => router.push("/login")}>
             <div className='flex gap-4 p-4 cursor-pointer'>
               <Image
                 src='/assets/logout.svg'
