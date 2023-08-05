@@ -2,6 +2,7 @@
 import { Comment } from 'react-loader-spinner';
 import React, { useState, useEffect } from 'react';
 import { EMOJI, LOADING_TEXT } from '@/constants/loading-text';
+import Image from 'next/image';
 
 export default function LoadingSpinner() {
   const generateLoadingText = () => {
@@ -26,21 +27,13 @@ export default function LoadingSpinner() {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
-      <div className='animate-bounce'>
-        <Comment
-          visible={true}
-          height="120"
-          width="120"
-          ariaLabel="comment-loading"
-          wrapperStyle={{}}
-          wrapperClass="comment-wrapper"
-          color="#fff"
-          backgroundColor="#F4442E"
-        />
+      <div className='animate-spin'>
+        <Image width={120} height={120} src="/assets/logo.svg" alt="Logo Spinner" />
+
       </div>
 
 
-      <h2 className='text-white mt-9 text-heading2-semibold'>{loadingText} </h2>
+      <h2 className='text-white mt-9 text-heading2-semibold text-clip'>{loadingText} </h2>
     </div>
   )
 }
