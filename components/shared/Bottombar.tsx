@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { sidebarLinks } from "@/constants";
+import { cn } from '@/lib/utils';
 
 function Bottombar() {
   const pathname = usePathname();
@@ -21,7 +22,7 @@ function Bottombar() {
             <Link
               href={link.route}
               key={link.label}
-              className={`bottombar_link ${isActive && "bg-primary-500"}`}
+              className={cn("bottombar_link group hover:bg-[#c90e80] hover:text-light-1", isActive && "bg-[#c90e80] text-light-1")}
             >
               <Image
                 src={link.imgURL}

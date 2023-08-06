@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 
 import { sidebarLinks } from "@/constants";
+import { cn } from '@/lib/utils';
 
 const LeftSidebar = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const LeftSidebar = () => {
 
   return (
     <section className='custom-scrollbar leftsidebar'>
-      <div className='flex flex-col flex-1 w-full gap-6 px-6'>
+      <div className='flex flex-col flex-1 w-full gap-6 px-6 '>
         {sidebarLinks.map((link) => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
@@ -27,7 +28,7 @@ const LeftSidebar = () => {
             <Link
               href={link.route}
               key={link.label}
-              className={`leftsidebar_link ${isActive && "bg-primary-500 "}`}
+              className={cn("leftsidebar_link group hover:bg-[#c90e80] hover:text-light-1", isActive && "bg-[#c90e80] text-light-1")}
             >
               <Image
                 src={link.imgURL}
