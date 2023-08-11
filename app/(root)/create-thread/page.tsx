@@ -1,81 +1,24 @@
-"use client";
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { useOrganization } from "@clerk/nextjs";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
+import PostThread from "@/components/forms/PostThread";
+import { fetchUser } from "@/lib/actions/user.actions";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ThreadValidation } from '@/lib/validations/thread';
+async function Page() {
+  const user = await currentUser();
+  if (!user) return null;
 
-
-interface Props {
-  userId: string;
-}
-
-function PostThread({ userId }: Props) {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const { organization } = useOrganization();
-
-  const form = useForm<z.infer<typeof ThreadValidation>>({
-    resolver: zodResolver(ThreadValidation),
-    defaultValues: {
-      thread: "",
-      accountId: userId,
-    },
-  });
-
-  const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
-    await createThread({
-      text: values.thread,
-      author: userId,
-      communityId: organization ? organization.id : null,
-      path: pathname,
-    });
-
-    router.push("/");
-  };
+  // fetch organization list created by user
+  const userInfo = await fetchUser(user.id);
+  if (!userInfo?.onboarded) redirect("/onboarding");
 
   return (
-    <Form {...form}>
-      <form
-        className='flex flex-col justify-start gap-10 mt-10'
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <FormField
-          control={form.control}
-          name='thread'
-          render={({ field }) => (
-            <FormItem className='flex flex-col w-full gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
-                Content
-              </FormLabel>
-              <FormControl className='border no-focus border-dark-4 bg-dark-3 text-light-1'>
-                <Textarea rows={15} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <h1 className='head-text'>Create Thread</h1>
 
-        <Button type='submit' className='bg-primary-500'>
-          Post Thread
-        </Button>
-      </form>
-    </Form>
+      <PostThread userId={userInfo._id} />
+    </>
   );
 }
 
-export default PostThread;
+export default Page;

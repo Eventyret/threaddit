@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { ThreadValidation } from "@/lib/validations/thread";
+import { createThread } from '@/lib/actions/thread.actions';
 
 interface Props {
   userId: string;
@@ -41,7 +42,7 @@ function PostThread({ userId }: Props) {
     await createThread({
       text: values.thread,
       author: userId,
-      communityId: organization ? organization.id : null,
+      communityId: null,
       path: pathname,
     });
 
