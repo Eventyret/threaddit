@@ -28,7 +28,7 @@ export async function createThread({ text, author, communityId, path }: Params) 
 
 }
 
-export async function fetchPosts(pageNumber = 1, pageSize = 20) {
+export async function fetchThreads(pageNumber = 1, pageSize = 20) {
   try {
     connectToDB();
     // calculate  the number of posts to skip
@@ -66,4 +66,39 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   } catch (error: any) {
     throw new Error(`Error fetching posts: ${error.message}`)
   }
+}
+
+export async function fetchThreadById(id: string) {
+  connectToDB();
+  try {
+    // TODO: populate community
+    const thread = await Thread.findById(id).populate({
+      path: "author",
+      model: User,
+      select: "_id id name image",
+    })
+      .populate({
+        path: "children",
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name parentId image",
+          },
+          {
+            path: "children",
+            model: Thread,
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name parentId image",
+            }
+          }
+        ]
+      }).exec()
+    return thread;
+  } catch (error: any) {
+    throw new Error(`Error fetching thread: ${error.message}`)
+  }
+
 }
