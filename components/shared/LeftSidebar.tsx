@@ -28,7 +28,7 @@ const LeftSidebar = () => {
             <Link
               href={link.route}
               key={link.label}
-              className={cn("leftsidebar_link group hover:bg-[#c90e80] hover:text-light-1", isActive && "bg-[#c90e80] text-light-1")}
+              className={cn("leftsidebar_link group hover:bg-primary-500 hover:text-light-1", isActive && "bg-primary-500 text-light-1")}
             >
               <Image
                 src={link.imgURL}
